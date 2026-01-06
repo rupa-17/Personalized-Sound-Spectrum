@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Playback with Range Control</title>
+    <style>
+        *{
+            font-family: Montserrat;
+        }
+        body{
+            background-color: #000;
+            color : white;
+        }
+        .time-display {
+            font-family: Arial, sans-serif;
+            margin-top: 10px;
+        }
+        .track-control {
+            margin-top: 20px;
+        }/* Generic styling for range inputs */
+.volume-slider input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Styling for thumb (circle) */
+.volume-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 4px solid #fff; /* Default border color */
+    background-color: inherit; /* Inherit background color from parent */
+}
+
+.volume-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 4px solid #fff; /* Default border color */
+    background-color: inherit; /* Inherit background color from parent */
+}
+
+.volume-slider-wrapper {
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 5px 5px;
+    margin-bottom: 11.5px;
+    background: rgb(23, 19, 19);
+    width : 100%;
+    
+}
+.volume-slider {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-bottom: 10px;
+}
+.volume-slider i {
+    margin: 0;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    width: 15px;
+    height: 15px;
+    margin: 20px;
+    font-size: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #f53192;
+    box-shadow: 0 10px 20px rgba(255, 26, 26, 0.22);
+    cursor: pointer;
+}
+.volume-slider1 i{
+    color : #f53192;
+}
+.volume-slider2 i{
+    color : #008080;
+}
+.volume-slider3 i{
+    color : #ff5733;
+}
+.volume-slider4 i{
+    color : #7600bc;
+}
+.volume-slider5 i{
+    color : #34A1C7;
+}
+.volume-controls {
+    display: flex;
+    align-items: center;
+}
+
+.volume-slider1 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #f53192;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 5px rgba(0, 128, 128, 0.22);
+}
+.volume-slider2 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #008080;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 5px rgba(0, 128, 128, 0.22);
+}
+.volume-slider3 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #ff5733;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 5px rgba(0, 128, 128, 0.22);
+}
+.volume-slider4 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #7600bc;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 5px rgba(0, 128, 128, 0.22);
+}
+.volume-slider5 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #34A1C7;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 5px rgba(0, 128, 128, 0.22);
+}
+.volume-value {
+    margin-left: 10px;
+    color: white;
+}
+/* Specific color classes for each volume track */
+.volume1,.progress1{
+    background: #f53192;
+}
+
+.volume2,.progress2 {
+    background: #008080;
+}
+
+.volume3,.progress3 {
+    background: #ff5733;
+}
+
+.volume4,.progress4 {
+    background: #7600bc;
+}
+
+.volume5,.progress5 {
+    background: #34A1C7;
+}
+.volume5::-webkit-slider-thumb {
+    background: #34A1C7; /* Change the color here */
+}
+
+
+.volume-slider1 input[type="range"] {
+    --color: #f53192;
+}
+.volume-slider2 input[type="range"] {
+    --color: #008080;
+}
+.volume-slider3 input[type="range"] {
+    --color: #ff5733;
+}
+.volume-slider4 input[type="range"] {
+    --color: #7600bc;
+}
+.volume-slider5 input[type="range"] {
+    --color: #34A1C7;
+}
+
+.volume-slider1 input[type="range"]::-webkit-slider-thumb {
+    background: #f53192;
+}
+.volume-slider2 input[type="range"]::-webkit-slider-thumb {
+    background: #008080;
+}
+.volume-slider3 input[type="range"]::-webkit-slider-thumb {
+    background: #ff5733;
+}
+.volume-slider4 input[type="range"]::-webkit-slider-thumb {
+    background: #7600bc;
+}
+.volume-slider5 input[type="range"]::-webkit-slider-thumb {
+    background: #34A1C7;
+}
+.volume-value {
+    margin-left: 10px;
+    color: white;
+}
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.controls div {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #f53192;
+    box-shadow: 0 10px 20px rgba(255, 26, 26, 0.22);
+    cursor: pointer;
+}
+.controls div:nth-child(2) {
+    transform: scale(1.5);
+    background: #f53192;
+    color: #fff;
+}
+/* Specific color classes for each volume track */
+.volume1,.progress1{
+    background: #f53192;
+}
+
+.volume2,.progress2 {
+    background: #008080;
+}
+
+.volume3,.progress3 {
+    background: #ff5733;
+}
+
+.volume4,.progress4 {
+    background: #7600bc;
+}
+
+.volume5,.progress5 {
+    background: #34A1C7;
+}
+.volume5::-webkit-slider-thumb {
+    background: #34A1C7; /* Change the color here */
+}
+/* Playback range specific styles */
+.progress1 {
+    --color: #f53192;
+}
+
+.progress2 {
+    --color: #008080;
+}
+
+.progress3 {
+    --color: #ff5733;
+}
+
+.progress4 {
+    --color: #7600bc;
+}
+
+.progress5 {
+    --color: #34A1C7;
+}
+.volume-controls-wrapper{
+    width : 100%;
+}
+
+.play-volume{
+    display: flex;
+    justify-content: space-evenly;
+}
+.time-setting{
+    margin-left : 15px;
+    margin-right : 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.heading-type{
+    display: inline;
+}
+.icon-type{
+    font-size: 19px;
+}
+
+.total-song {
+    display: flex;  /* Add some space between the columns */
+     /* Optional: Add padding around the container */
+}
+.main-song{
+    width : 35%;
+}
+.space-region{
+    width : 5%;
+}
+.last-song-wrapper{
+    display: flex;
+    flex-direction: column;
+    width : 60%;
+    background : url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSazTNGclQ2htodBuJNrinBXIIZnBIyn36mFN4jkJHo_W59m7mQ");
+    background-position: center;
+    background-size: cover;
+}
+.file-buttons{
+    margin-top: 3px;
+}
+.file-buttons h2{
+    font-size: 35px;
+}
+.col-space{
+    height: 50%;
+}
+.split{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom : 20px;
+}
+.import-section{
+    padding : 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.customButton{
+    padding: 10px 20px;
+    background-color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;/* Add position absolute */
+    top: 100px; /* Adjust top position as needed */
+    right: 80px;
+    align-items: center;
+}
+.logo-icon{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    color : #f53192;
+    background: #fff;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(255, 26, 26, 0.22);
+}
+.startButton{
+    padding: 10px 20px;
+    background-color: #fff;
+    font-weight : bold;
+    font-size: 18px;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 35px;
+}
+#message{
+    font-weight : bold;
+}
+.background-container {
+    position: relative;
+    margin-top : 120px; /* Adjust the height as needed */
+}
+
+header{
+    position: fixed;
+    top:0;
+    left:0;
+    width : 100%;
+    padding : 10px 80px;
+    display: flex;
+    justify-content:space-between ;
+    align-items: center;
+    z-index: 1000;
+    background: black;
+    box-sizing: border-box;
+}
+.logo{
+    font-size : 1.5em;
+    color : #fff;
+    user-select: none;
+}
+
+.navigation a{
+    position: relative;
+    font-size: 1.1em;
+    color : #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+.navigation a::after{
+    content:'' ;
+    position: absolute;
+    left : 0;
+    bottom : -6px;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform .5s;
+}
+.navigation a:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+}
+.navigation .btnLogin-popup{
+    width : 130px;
+    height: 50px;
+    background: transparent;
+    border : 2px solid #fff;
+    outline: none;
+    border-radius: 6px;
+    cursor : pointer;
+    font-size: 1.1em;
+    color: #fff;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+.navigation .btnLogin-popup:hover{
+background: #162938;
+color : white;
+
+}
+.head{
+    display: flex;
+    align-items: center;
+}
+.head div{
+    margin-right: 30px;
+}
+footer {
+    position: relative;
+    background-color: #162938;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-links ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.footer-links ul li h3{
+    font-size : 25px;
+}
+.follow-us {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.f-icons ul li{
+display : inline-block;
+font-size: 30px;
+
+} 
+.footer-links ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-links ul li a:hover {
+    text-decoration: underline;
+}
+.f-icons ul li i:hover {
+    color :rgb(243, 142, 159);
+    color : #f53192;
+}
+.copywright p {
+    margin: 0;
+}
+
+.copywright p a {
+    color: #f53192;
+    text-decoration: none;
+}
+
+.copywright p a:hover {
+    text-decoration: underline;
+}
+#fileName{
+    font-weight: bold;
+}
+
+    </style>
+    <link rel="stylesheet" href="s.css">
+</head>
+<script src="https://kit.fontawesome.com/2e687deb25.js" crossorigin="anonymous"></script>
+<body>
+    
+    <div class="background-container">
+        <header>
+            <div class="head">
+           <div class="logo-icon"><i class="icon fas fa-icons"></i> </div>
+            <h2 class="logo">Sound Spectrum</h2>
+            </div>
+            <nav class="navigation">
+                <a href="/home">Home</a>
+                
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+        </div>
+
+    <div class="total-song">
+    <div class="main-song">
+    <div class="volume-controls-wrapper">
+        <!-- Song 1 Controls -->
+        <div class="volume-slider-wrapper">
+            <div class="volume-slider volume-slider1">
+               <div class="heading-type">
+                <i class="fa-solid fa-microphone" id="fa-icon1"></i>
+                <span class="icon-type">Vocals</span>
+                </div>
+                <audio id="vocalsAudioPlayer"></audio>
+                <div class="range-controls">
+                <input type="range" value="0" id="vocalsPlaybackRange" class="progress1" onchange="changeProgress(1)">
+                <div class="time-setting">
+                <span id="currentTime1">0:00</span>
+                <span id="maxDuration1">0:00</span>
+                </div>
+                </div>
+               <div class="play-volume">
+                <div class="controls">
+                    <div onclick="playPaused(1)" id="playButton1"><i class="fa-solid fa-play" id="ctrlicon1"></i></div>
+                </div>
+                <div class="volume-controls">
+                    <input type="range" value="100" id="vocalsVolumeRange" class="volume1" min="0" max="100" onchange="changeVolume(1)">
+                    <span class="volume-value" id="volumeValue1">100</span>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Song 2 Controls -->
+        <div class="volume-slider-wrapper">
+            <div class="volume-slider volume-slider2">
+               <div class="heading-type">
+                <i class="fa-solid fa-music" id="fa-icon2"></i>
+                <span class="icon-type">BGM</span>
+                </div>
+                <audio id="otherAudioPlayer"></audio>
+                <div class="range-controls">
+                <input type="range" value="0" id="otherPlaybackRange" class="progress2" onchange="changeProgress(2)">
+                <div class="time-setting">
+                <span id="currentTime2">0:00</span>
+                <span id="maxDuration2">0:00</span>
+                </div>
+                </div>
+               <div class="play-volume">
+                <div class="controls">
+                    <div onclick="playPaused(2)" id="playButton2"><i class="fa-solid fa-play" id="ctrlicon2"></i></div>
+                </div>
+                <div class="volume-controls">
+                    <input type="range" value="100" id="otherVolumeRange" class="volume2" min="0" max="100" onchange="changeVolume(2)">
+                    <span class="volume-value" id="volumeValue2">100</span>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Song 3 Controls -->
+        <div class="volume-slider-wrapper">
+            <div class="volume-slider volume-slider3">
+               <div class="heading-type">
+                <i class="fa-solid fa-drum" id="fa-icon3"></i>
+                <span class="icon-type">Drums</span>
+                </div>
+                <audio id="drumsAudioPlayer"></audio>
+                <div class="range-controls">
+                <input type="range" value="0" id="drumsPlaybackRange" class="progress3" onchange="changeProgress(3)">
+                <div class="time-setting">
+                <span id="currentTime3">0:00</span>
+                <span id="maxDuration3">0:00</span>
+                </div>
+                </div>
+               <div class="play-volume">
+                <div class="controls">
+                    <div onclick="playPaused(3)" id="playButton3"><i class="fa-solid fa-play" id="ctrlicon3"></i></div>
+                </div> <!-- Closed div tag for playButton3 -->
+                <div class="volume-controls">
+                    <input type="range" value="100" id="drumsVolumeRange" class="volume3" min="0" max="100" onchange="changeVolume(3)">
+                    <span class="volume-value" id="volumeValue3">100</span>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Song 4 Controls -->
+        <div class="volume-slider-wrapper">
+            <div class="volume-slider volume-slider4">
+               <div class="heading-type">
+                <i class="fa-solid fa-guitar" id="fa-icon4"></i>
+                <span class="icon-type">Guitar</span>
+                </div>
+                <audio id="bassAudioPlayer"></audio>
+                <div class="range-controls">
+                <input type="range" value="0" id="bassPlaybackRange" class="progress4" onchange="changeProgress(4)">
+                <div class="time-setting">
+                <span id="currentTime4">0:00</span>
+                <span id="maxDuration4">0:00</span>
+                </div>
+                </div>
+               <div class="play-volume">
+                <div class="controls">
+                    <div onclick="playPaused(4)" id="playButton4"><i class="fa-solid fa-play" id="ctrlicon4"></i></div>
+                </div> <!-- Closed div tag for playButton4 -->
+                <div class="volume-controls">
+                    <input type="range" value="100" id="bassVolumeRange" class="volume4" min="0" max="100" onchange="changeVolume(4)">
+                    <span class="volume-value" id="volumeValue4">100</span>
+                </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="space-region"></div>
+        <!-- Song 5 Controls -->
+         <div class="last-song-wrapper">
+            <div class="file-buttons">
+                <h2>Sound Splitter</h2>
+                <p id="message"></p>
+        <form id="fileForm">
+        <input type="file" id="fileInput" accept=".mp3" style="display:none;">
+        <div class="import-section">
+            <div class="logo-icon"><i class="icon fas fa-icons"></i> </div>
+        <button class="customButton" type="button" onclick="triggerFileInput()">Import your own Song</button>
+        </div>
+    </form>
+    <p id="fileName"></p>
+            </div>
+            <div class="col-space"></div>
+            <div class="main-song-section">
+                <div class="split">
+                <input class="startButton" type="button" value="Split the Song" onclick="submitFile()">
+                    </div>
+                <div class="volume-slider-wrapper">
+            <div class="volume-slider volume-slider5">
+               <div class="heading-type">
+                <i class="fa-solid fa-drum" id="fa-icon5"></i>
+                <span class="icon-type">Original Song</span>
+                </div>
+                <audio id="originalAudioPlayer"></audio>
+                <div class="range-controls">
+                <input type="range" value="0" id="originalPlaybackRange" class="progress5" onchange="changeProgress(5)">
+                <div class="time-setting">
+                <span id="currentTime5">0:00</span>
+                <span id="maxDuration5">0:00</span>
+                </div>
+                </div>
+               <div class="play-volume">
+                <div class="controls">
+                    <div onclick="playPaused(5)" id="playButton5"><i class="fa-solid fa-play" id="ctrlicon5"></i></div>
+                </div> <!-- Closed div tag for playButton5 -->
+                <div class="volume-controls">
+                    <input type="range" value="100" id="originalVolumeRange" class="volume5" min="0" max="100" onchange="changeVolume(5)">
+                    <span class="volume-value" id="volumeValue5">100</span>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><h3>Terms and conditions</h3></li>
+                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+            </ul>
+            <ul>
+                <li><h3>Company</h3></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">FAQs</a></li>
+            </ul>
+            <div class="f-icons">
+            <ul>
+                <div class="follow-us">
+                <li><h3>Follow Us</h3></li>
+                <div class="f-icons">
+                <li><a href="#"><i class="fab fa-google"></i></a></li>
+                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                </div>
+                </div>
+            </ul>
+            </div>
+        </div>
+        <div class="copywright">
+            <p>&copy; 2024 Music Spectrum. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        let uploadedFileName = null;
+    
+        const sliders = document.querySelectorAll('.volume-slider input[type="range"]');
+        sliders.forEach(slider => {
+            slider.addEventListener('input', function() {
+                const value = (this.value - this.min) / (this.max - this.min) * 100;
+                const color = getComputedStyle(this).getPropertyValue('--color');
+                this.style.background = `linear-gradient(to right, ${color} ${value}%, white ${value}%)`;
+            });
+        });
+        function triggerFileInput() {
+            fileInput.click();
+        }
+        function submitFile() {
+            const fileInput = document.getElementById('fileInput');
+            const fileNameDisplay = document.getElementById('fileName');
+            const originalAudioPlayer = document.getElementById('originalAudioPlayer');
+            const vocalsAudioPlayer = document.getElementById('vocalsAudioPlayer');
+            const otherAudioPlayer = document.getElementById('otherAudioPlayer');
+            const drumsAudioPlayer = document.getElementById('drumsAudioPlayer');
+            const bassAudioPlayer = document.getElementById('bassAudioPlayer');
+            const message = document.getElementById("message");
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+    
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.file_name) {
+                        uploadedFileName = data.file_name;
+                        fileNameDisplay.textContent = 'Uploaded MP3: ' + data.file_name;
+                        const audioSrc = `/play/${data.file_name}/${file.name}`;
+                        originalAudioPlayer.src = audioSrc;
+                        originalAudioPlayer.load();
+    
+                        // Load all other audio tracks
+                        loadAndPlayAudio('vocals.wav', vocalsAudioPlayer);
+                        loadAndPlayAudio('other.wav', otherAudioPlayer);
+                        loadAndPlayAudio('drums.wav', drumsAudioPlayer);
+                        loadAndPlayAudio('bass.wav', bassAudioPlayer);
+                        message.textContent="";
+                        // Play only the separated tracks once they are loaded
+                        playAllTracks(vocalsAudioPlayer, otherAudioPlayer, drumsAudioPlayer, bassAudioPlayer);
+                    } else {
+                        fileNameDisplay.textContent = 'Error: ' + data.error;
+                    }
+                })
+                .catch(error => {
+                    fileNameDisplay.textContent = 'Error: ' + error;
+                });
+            } else {
+                message.textContent = "Please select an MP3 file.";
+            }
+        }
+    
+        function loadAndPlayAudio(audioFile, audioPlayer) {
+            if (uploadedFileName) {
+                const audioSrc = `/play/${uploadedFileName}/${audioFile}`;
+                audioPlayer.src = audioSrc;
+                audioPlayer.load();
+                message.textContent="";
+            } else {
+                message.textContent = "Please select an MP3 file.";
+            }
+        }
+    
+        function playAllTracks(...audioPlayers) {
+            let loadCount = 0;
+            audioPlayers.forEach(audioPlayer => {
+                audioPlayer.addEventListener('canplaythrough', () => {
+                    loadCount++;
+                    if (loadCount === audioPlayers.length) {
+                        audioPlayers.forEach(player => player.play());
+                    }
+                });
+            });
+        }
+    
+        function setupTrackControls(audioPlayer, playbackRange, toggleButton, volumeRange, currentTimeDisplay, maxDurationDisplay, volumeValueDisplay) {
+            // Update the range max value and max duration display when the metadata is loaded
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                playbackRange.max = Math.floor(audioPlayer.duration);
+                maxDurationDisplay.textContent = formatTime(audioPlayer.duration);
+            });
+        
+            // Update the audio playback position when the range input changes
+            playbackRange.addEventListener('input', () => {
+                audioPlayer.currentTime = playbackRange.value;
+            });
+        
+            // Update the range input value and current time display as the audio plays
+            audioPlayer.addEventListener('timeupdate', () => {
+                playbackRange.value = Math.floor(audioPlayer.currentTime);
+                currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+            });
+        
+            // Toggle play/pause when the button is clicked
+            toggleButton.addEventListener('click', () => {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    toggleButton.querySelector('i').classList.remove('fa-play');
+                    toggleButton.querySelector('i').classList.add('fa-pause');
+                } else {
+                    audioPlayer.pause();
+                    toggleButton.querySelector('i').classList.remove('fa-pause');
+                    toggleButton.querySelector('i').classList.add('fa-play');
+                }
+            });
+        
+            // Update the button icon based on the audio's play/pause state
+            audioPlayer.addEventListener('play', () => {
+                toggleButton.querySelector('i').classList.remove('fa-play');
+                toggleButton.querySelector('i').classList.add('fa-pause');
+            });
+        
+            audioPlayer.addEventListener('pause', () => {
+                toggleButton.querySelector('i').classList.remove('fa-pause');
+                toggleButton.querySelector('i').classList.add('fa-play');
+            });
+        
+            // Update the audio volume when the volume range input changes
+            volumeRange.addEventListener('input', () => {
+                audioPlayer.volume = volumeRange.value / 100;
+                volumeValueDisplay.textContent = volumeRange.value; // Update volume value display
+            });
+        }
+        
+        // Utility function to format time in MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const sliders = document.querySelectorAll('.volume-slider input[type="range"], .volume-slider input[type="range"]');
+        
+            sliders.forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const value = (this.value - this.min) / (this.max - this.min) * 100;
+                    const color = getComputedStyle(this).getPropertyValue('--color');
+                    this.style.background = `linear-gradient(to right, ${color} ${value}%, white ${value}%)`;
+                });
+            });
+        
+            setupTrackControls(
+                document.getElementById('originalAudioPlayer'),
+                document.getElementById('originalPlaybackRange'),
+                document.getElementById('playButton5'),
+                document.getElementById('originalVolumeRange'),
+                document.getElementById('currentTime5'),
+                document.getElementById('maxDuration5'),
+                document.getElementById('volumeValue5') // Add this line
+            );
+            setupTrackControls(
+                document.getElementById('vocalsAudioPlayer'),
+                document.getElementById('vocalsPlaybackRange'),
+                document.getElementById('playButton1'),
+                document.getElementById('vocalsVolumeRange'),
+                document.getElementById('currentTime1'),
+                document.getElementById('maxDuration1'),
+                document.getElementById('volumeValue1') // Add this line
+            );
+            setupTrackControls(
+                document.getElementById('otherAudioPlayer'),
+                document.getElementById('otherPlaybackRange'),
+                document.getElementById('playButton2'),
+                document.getElementById('otherVolumeRange'),
+                document.getElementById('currentTime2'),
+                document.getElementById('maxDuration2'),
+                document.getElementById('volumeValue2') // Add this line
+            );
+            setupTrackControls(
+                document.getElementById('drumsAudioPlayer'),
+                document.getElementById('drumsPlaybackRange'),
+                document.getElementById('playButton3'),
+                document.getElementById('drumsVolumeRange'),
+                document.getElementById('currentTime3'),
+                document.getElementById('maxDuration3'),
+                document.getElementById('volumeValue3') // Add this line
+            );
+            setupTrackControls(
+                document.getElementById('bassAudioPlayer'),
+                document.getElementById('bassPlaybackRange'),
+                document.getElementById('playButton4'),
+                document.getElementById('bassVolumeRange'),
+                document.getElementById('currentTime4'),
+                document.getElementById('maxDuration4'),
+                document.getElementById('volumeValue4') // Add this line
+            );
+        });
+        
+        
+    </script>
+    
+    </body>
+</html>

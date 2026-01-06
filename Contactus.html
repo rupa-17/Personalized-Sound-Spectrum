@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Sound Spectrum</title>
+    <style>
+*{
+    margin : 0;
+    padding : 0;
+    box-sizing: border-box;
+    font-family: Montserrat;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+.background-container {
+    position: relative;
+    height: 70vh; /* Adjust the height as needed */
+    background: url("https://www.shutterstock.com/image-photo/website-internet-contact-us-page-260nw-2152770651.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+header{
+    position: fixed;
+    top:0;
+    left:0;
+    width : 100%;
+    padding : 20px 100px;
+
+    display: flex;
+    justify-content:space-between ;
+    align-items: center;
+    z-index: 1000;
+    background: black;
+    box-sizing: border-box;
+}
+.logo{
+    font-size : 2em;
+    color : #fff;
+    user-select: none;
+}
+
+.navigation a{
+    position: relative;
+    font-size: 1.1em;
+    color : #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+.navigation a::after{
+    content:'' ;
+    position: absolute;
+    left : 0;
+    bottom : -6px;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform .5s;
+}
+.navigation a:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+}
+.title-name{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color : black;
+    margin-top : 80px;
+}
+.t-name{
+    margin-top: 80px;
+    font-size: 60px;
+    font-weight: bold;
+    color : black;
+}
+.title-info{
+    margin-top: 40px;
+    margin-left : -10px;
+    font-size : 20px;
+    line-height: 35px;
+    font-weight: bold;
+    color : black;
+}
+.matter{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    
+    line-height: 40px;
+
+}
+.left-info{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    width : 50%;
+}
+.c1-head{
+    font-size: 40px;
+    margin-bottom: 30px;
+    color : #0056b3;
+    line-height: 60px;
+}
+.c1-info{
+    align-items: left;
+    font-size: 20px;
+}
+.right-info{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width : 50%;
+}
+.r-head{
+    font-size: 40px;
+    margin-bottom: 30px;
+    color : #0056b3;
+}
+.r-info{
+    align-items: left;
+    font-size: 20px;
+}
+.form-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.form-container h2{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+input[type="submit"] {
+    position: relative;
+    margin-top: 20px;
+    align-items: center;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 45%;
+}
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    position: relative;
+    background-color: #162938;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-links ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.footer-links ul li h3{
+    font-size : 25px;
+}
+.follow-us {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.f-icons ul li{
+display : inline-block;
+font-size: 30px;
+
+} 
+.footer-links ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-links ul li a:hover {
+    text-decoration: underline;
+}
+.f-icons ul li i:hover {
+    color :rgb(243, 142, 159);
+    color : #f53192;
+}
+.copywright p {
+    margin: 0;
+}
+
+.copywright p a {
+    color: #f53192;
+    text-decoration: none;
+}
+
+.copywright p a:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <script src="https://kit.fontawesome.com/2e687deb25.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="background-container">
+    <header>
+        <h2 class="logo">Sound Spectrum</h2>
+        <nav class="navigation">
+            <a href="/home">Home</a>
+            
+            <a href="/submit_contact" onclick="reloadPage(event)">Contact</a>
+        </nav>
+    </header>
+    <div class="title-name">
+        <div class="t-name"><pre>Talk to a Human</pre></div>
+    <div class="title-info"><pre>
+        You're not going to hit a ridiculously long phone menu when you call us. Your
+        email isn't going to the inbox abyss, never to be seen or heard from again. At
+               Choice Screening, we provide the exceptional service we'd want to
+                                experience ourselves!</pre></div>
+        </div>
+    </div>
+        <div>
+            <div class="matter">
+                <div class="left-info">
+                <p class="c1-head">
+                    Choice Screening strives to
+                    provide the best service possible
+                    with every contact!
+                </p>
+                <p class="c1-info">
+                    We operate in an industry built on trust. 
+                    This can only be achieved through communication 
+                    and experienced support – from the first 
+                    contact past your ten-year anniversary.</p
+                    >
+                    <p class="c2-head">
+                        At Choice you always talk to a human!
+                    </p>
+                    <pre class="c2-info">
+
+                    </pre>
+            </div>
+            
+            </div>
+        </div>
+            
+        <div class="form-container">
+            <h2>Your Information</h2>
+            <form action="#" method="post">
+                <div>
+                    <label for="first-name">First Name*</label>
+                    <input type="text" id="first-name" name="first-name" required>
+                </div>
+                <div>
+                    <label for="last-name">Last Name*</label>
+                    <input type="text" id="last-name" name="last-name" required>
+                </div>
+                <div>
+                    <label for="Email">Email*</label><br>
+                    <input type="email" id="Email" name="Email" required>
+                </div>
+                <div>
+                    <label for="phone-number">Phone Number*</label>
+                    <input type="text" id="phone-number" name="phone-number" required>
+                </div>
+                <div>
+                    <input type="submit" value="Contact Us">
+                </div>
+            </form>
+            </div>
+<footer>
+    <div class="footer-links">
+        <ul>
+            <li><h3>Terms and conditions</h3></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+        </ul>
+        <ul>
+            <li><h3>Company</h3></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">FAQs</a></li>
+        </ul>
+        <div class="f-icons">
+        <ul>
+            <div class="follow-us">
+            <li><h3>Follow Us</h3></li>
+            <div class="f-icons">
+            <li><a href="#"><i class="fab fa-google"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+            </div>
+            </div>
+        </ul>
+        </div>
+    </div>
+    <div class="copywright">
+        <p>&copy; 2024 Music Spectrum. All rights reserved.</p>
+    </div>
+</footer>
+        <script>
+            function reloadPage(event) {
+                event.preventDefault();
+                window.location.href = "/contact";
+            }
+        </script>
+</body>
+</html>
