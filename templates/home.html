@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Sound Spectrum</title>
+    <style>
+*{
+    margin : 0;
+    padding : 0;
+    box-sizing: border-box;
+    font-family: Montserrat;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+.background-container {
+    position: relative;
+    height: 120vh; /* Adjust the height as needed */
+    background: url("https://msk.org.au/wp-content/uploads/2021/06/music.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+header{
+    position: fixed;
+    top:0;
+    left:0;
+    width : 100%;
+    padding : 20px 100px;
+
+    display: flex;
+    justify-content:space-between ;
+    align-items: center;
+    z-index: 1000;
+    background: black;
+   
+    box-sizing: border-box;
+}
+.logo{
+    font-size : 2em;
+    color : #fff;
+    user-select: none;
+}
+
+.navigation a{
+    position: relative;
+    font-size: 1.1em;
+    color : #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+.navigation a::after{
+    content:'' ;
+    position: absolute;
+    left : 0;
+    bottom : -6px;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform .5s;
+}
+.navigation a:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+}
+.navigation .btnLogin-popup{
+    width : 130px;
+    height: 50px;
+    background: transparent;
+    border : 2px solid #fff;
+    outline: none;
+    border-radius: 6px;
+    cursor : pointer;
+    font-size: 1.1em;
+    color: #fff;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+.navigation .btnSignup-popup{
+    width : 130px;
+    height: 50px;
+    background: transparent;
+    border : 2px solid #fff;
+    outline: none;
+    border-radius: 6px;
+    cursor : pointer;
+    font-size: 1.1em;
+    color: #fff;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+.navigation .btnLogin-popup:hover{
+background: #162938;
+color : white;
+
+}
+.navigation .btnSignup-popup:hover{
+    background: #162938;
+    color : white;
+    
+    }
+
+
+    .wrapper {
+        margin-top: 120px;
+        position: absolute; /* Position the wrapper absolutely within the background container */
+        top: 0;
+        left : 35%; /* Center the wrapper horizontally */
+        transform: translateX(-50%);
+        width: 400px;
+        height: 440px;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, .5);
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        opacity: 0; /* Initially hide the wrapper */
+        transform: scale(0.8); /* Initially scale down the wrapper */
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .wrapper.active-popup {
+        opacity: 1; /* Show the wrapper */
+        transform: scale(1); /* Scale up the wrapper */
+    }
+    .wrapper.active-popdown {
+        opacity: 1; /* Show the wrapper */
+        transform: scale(0); /* Scale up the wrapper */
+    }
+    
+    .wrapper.active {
+        height: 560px;
+    }
+    
+    .wrapper .form-box {
+        width: 100%;
+        padding: 40px;
+    }
+    
+    .wrapper .form-box.login {
+        transition: transform .18s ease;
+        transform: translateX(0);
+    }
+    
+    .wrapper.active .form-box.login {
+        transition: none;
+    transform: translateX(-400px);
+    }
+    
+    .wrapper .form-box.register {
+        position: absolute;
+    transition: none;
+    transform: translateX(400px);
+    }
+    
+    .wrapper.active .form-box.register {
+        transition: transform .18s ease;
+    transform: translateX(0);
+    }
+.wrapper .icon-close{
+    position: absolute;
+    top : 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    background: #162938;
+    font-size: 2em;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+.form-box h2{
+    font-size: 2em;
+    color : white;
+    text-align: center;
+}
+.input-box{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid white;
+    margin : 30px 0;
+}
+.input-box label{
+    position: absolute;
+    top : 50%;
+    left : 5px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: white;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+.input-box input:focus~label,
+.input-box input:valid~label{
+    top : -5px;
+}
+.input-box input{
+    width : 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    color : white;
+    font-weight: 600;
+    padding: 0 35px 0 5px;
+}
+.input-box .icon{
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    color: white;
+    line-height: 57px;
+}
+.remember-forgot{
+    font-size: .9em;
+    color : white;
+    font-weight: 500;
+    margin : -15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.remember-forgot label input{
+    accent-color: white;
+    margin-right: 3px;
+}
+.remember-forgot a{
+    color: white;
+    text-decoration: none;
+}
+.remember-forgot a:hover{
+    text-decoration: underline;
+}
+.btn{
+    width: 100%;
+    height: 45px;
+    background: #162938;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #fff;
+    font-weight: 500;
+}
+.login-register{
+    font-size: .9em;
+    color : white;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+.login-register p a{
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+.login-register p a:hover{
+    text-decoration: underline;
+
+}
+.title-name{
+    position: absolute;
+    color : #fff;
+    margin-top : 140px;
+}
+.t-name{
+    margin-left : -200px;
+    font-size: 60px;
+    font-weight: bold;
+    color : cyan;
+    text-shadow: 0 0 5px cyan;
+}
+.title-info{
+    margin-top: 20px;
+    margin-left : -10px;
+    font-size : 20px;
+    font-weight: bold;
+    color : #fff;
+    text-shadow: 0 0 6px #D875FF;
+}
+.get-started{
+    position: absolute;
+    margin-top: 450px;
+    margin-left : 50px;
+    border-radius: 10px;
+    background : #f53192;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.second-container{
+    position: relative;
+    display: flex;
+    justify-content: space-evenly;
+    background:  #fff;
+    padding : -40px 20px;
+    
+
+}
+.second-container img{
+    border-radius: 30px;
+    margin-top : 150px;
+    margin-left : 20px;
+    height: 450px;
+    width : 350px;
+}
+.intro-text {
+    margin-top: -80px;
+    padding: 300px 20px;
+    width : 50%;
+}
+
+.intro-text h2 {
+    font-size: 60px;
+    color: #D875FF;
+    color : #83018E;
+    color : #030056;
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, cyan 0%, #f53192 30%, #34A1C7 81%), linear-gradient(rgb(97, 183, 217) 32%, #f53192 40%, rgb(78, 99, 132) 81%);
+    background-clip: text;
+    /*add this line, it defines how far the background should extend within an element, here we set it to text */
+    -webkit-background-clip: text;
+    /* add this line, for browsers compatibility */
+    -webkit-text-fill-color: transparent;/
+    
+}
+
+.intro-text p {
+    font-size: 20px;
+    color: #030056;
+    line-height: 1.3;
+    font-weight: 500;
+    background: linear-gradient(to bottom, cyan 0%, #f53192 30%, #34A1C7 81%), linear-gradient(rgb(97, 183, 217) 32%, #f53192 40%, rgb(78, 99, 132) 81%);
+    background-clip: text;
+    /*add this line, it defines how far the background should extend within an element, here we set it to text */
+    -webkit-background-clip: text;
+    /* add this line, for browsers compatibility */
+    -webkit-text-fill-color: transparent;/
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+  .row {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  .card {
+    flex: 1;
+    max-width: 380px;
+    margin: 0 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .card img {
+    width: 100%;
+    border-radius: 10px;
+    height: 300px;
+    background: #f9c9cf;
+  }
+  .card h2 {
+    margin-top: 10px;
+  }
+  .card p {
+    margin-top: 5px;
+  }
+.website-info{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -100px;
+    text-align: center;
+    background: #162938;
+    color : #030056;
+}
+.website-info h2{
+    font-size: 50px;
+    margin-bottom: 50px;
+    margin-top: 100px;
+    background: linear-gradient(to right, cyan 0%, #f53192 30%, #34A1C7 81%), linear-gradient(rgb(97, 183, 217) 32%, #f53192 40%, rgb(78, 99, 132) 81%);
+    background-clip: text;
+    /*add this line, it defines how far the background should extend within an element, here we set it to text */
+    -webkit-background-clip: text;
+    /* add this line, for browsers compatibility */
+    -webkit-text-fill-color: transparent;/
+}
+.website-info p{
+    text-align: center;
+    line-height: 40px;
+    width : 85%;
+    margin-bottom: 100px;
+    font-weight: 500;
+    color : cyan;
+   
+    
+    
+    
+}
+.coloured-text{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f53192;
+    color: #fff;
+    padding-top : 150px;
+    padding-bottom : 150px;
+    text-align: center;
+    justify-content: center;
+}
+.coloured-text h2{
+    font-size: 40px;
+    width : 85%;
+    text-align: center;
+    font-weight: 500;
+    
+}
+footer {
+    position: relative;
+    background-color: #162938;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-links ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.footer-links ul li h3{
+    font-size : 25px;
+}
+.follow-us {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.f-icons ul li{
+display : inline-block;
+font-size: 30px;
+
+} 
+.footer-links ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-links ul li a:hover {
+    text-decoration: underline;
+}
+.f-icons ul li i:hover {
+    color :rgb(243, 142, 159);
+    color : #f53192;
+}
+.copywright p {
+    margin: 0;
+}
+
+.copywright p a {
+    color: #f53192;
+    text-decoration: none;
+}
+
+.copywright p a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+    <script src="https://kit.fontawesome.com/2e687deb25.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <div class="background-container">
+        <header>
+            <h2 class="logo">Sound Spectrum</h2>
+            <nav class="navigation">
+                <a href="/submit_home" onclick="reloadPage(event)">Home</a>
+                
+                <a href="/contact">Contact</a>
+                <button class="btnLogin-popup">Login</button>
+                <button class="btnSignup-popup">Sign Up</button>
+            </nav>
+        </header>
+        <div class="title-name">
+            <div class="t-name"><pre>
+                Personalize your 
+                music with 
+                Music Spectrum</pre></div>
+        <div class="title-info"><pre>
+            Experience Music Spectrum feature: effortlessly separate 
+            vocals and create stunning instrumental tracks in a snap.</pre></div>
+    </div>
+    <div>
+        <button class="get-started">Get Started</button>
+    </div>
+        <div class="wrapper">
+            <span class="icon-close"><i class="fa-solid fa-xmark"></i></span>
+            <div class="form-box login">
+                <h2>Login</h2>
+                <form action="/login" id="loginForm">
+                    <div class="input-box">
+                        <span class="icon"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="loginUsername" placeholder="Username"  required> 
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="loginPassword" placeholder="Password" required> 
+                        <label>Password</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox">Remember me</label>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+                    <div>
+                        <p id="loginError" style="color: red; display: none;">Incorrect username or password.</p>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="login-register">
+                        <p>Don't have an account? <a href="#" class="register-link">Register</a></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-box register">
+                <h2>Registration</h2>
+                <form action="/register" id="registerForm">
+                    <div class="input-box">
+                        <span class="icon"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="registerUsername" placeholder="Username" required> 
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" id="registerEmail" placeholder="Email" required> 
+                        <label>Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="registerPassword" placeholder="Password"  required> 
+                        <label>Password</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password"  id="registerConfirmPassword" placeholder="Confirm Password" required> 
+                        <label>Confirm Password</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox">I agree to the terms & conditions</label>
+                        
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                    <div class="login-register">
+                        <p>Already have an account? <a href="#" class="login-link">Login</a></p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        </div>
+        <div class="second-container">
+            <img src="https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2024/03/woman-listening-to-music-with-headphones.jpg" alt="" height="200px" width="200px">
+        <div class="intro-text">
+            <h2>Welcome to Music Spectrum</h2>
+            <p>Unlock the full potential of your music with Music Spectrum. Our innovative tool allows you to effortlessly separate vocals and create stunning instrumental tracks in a snap. Whether you're a musician, producer, or enthusiast, Music Spectrum empowers you to explore new creative possibilities and take your compositions to the next level.<br><br></p>
+        </div>
+        </div>
+
+        <div class="website-info">
+            <h2>What does Music Splitter do?</h2>
+            <p>A music splitter is a device or software application used to split or separate audio signals into multiple outputs. It allows users to route audio from a single source, such as a music player or mixer, to multiple destinations simultaneously. Music splitters are commonly used in various scenarios, such as in recording studios, live performances, DJ setups, and home audio systems.
+
+               These devices typically feature multiple input and output ports, allowing users to connect different audio sources and output devices. Some music splitters also offer additional features like volume control, signal amplification, and equalization to customize the audio output according to user preferences.
+               
+               In recording studios, music splitters are often used to send audio signals from a mixing console to multiple recording devices or monitor speakers. In live performances, they help distribute audio to multiple stage monitors or speakers for performers and audience members to hear.
+               
+               In DJ setups, music splitters enable DJs to send audio to multiple headphones or speaker systems for cueing and monitoring while simultaneously playing music for the audience. Additionally, music splitters can be used in home audio systems to distribute audio from a single source, such as a stereo system or media player, to multiple rooms or speaker zones throughout a house.
+               
+               Overall, music splitters provide flexibility and versatility in managing audio signals, making them essential tools for various audio applications and environments.
+               
+               </p>
+         </div>
+        <div class="container">
+            <div class="row">
+              <div class="card">
+                <img src="images\\card1.png" alt="Image 1">
+                <h2>Drums</h2>
+                <p>Drums are not just instruments; they're vessels of rhythm and expression, embodying a universal language that transcends boundaries and connects people across cultures and generations, They are conduits of rhythm and emotion.</p>
+              </div>
+          
+              <div class="card">
+                <img src="images\\card2.png" alt="Image 2">
+                <h2>Piano</h2>
+                <p>The piano's enduring appeal lies in its expressive capabilities, rich history, and adaptability to different musical contexts, making it a beloved instrument cherished by musicians and enthusiasts worldwide.</p>
+              </div>
+          
+              <div class="card">
+                <img src="images\\card3.png" alt="Image 3">
+                <h2>Guitar</h2>
+                <p>Guitars are versatile instruments that have played a crucial role in shaping the sound of modern music. Their accessibility and adaptability make them a favorite among musicians and enthusiasts of all levels.</p>
+              </div>
+            </div>
+          
+            <div class="row">
+              <div class="card">
+                <img src="images\\card4.png" alt="Image 4">
+                <h2>Flute</h2>
+                <p>As a symbol of elegance and refinement, the flute continues to inspire musicians and audiences alike, its timeless melodies weaving threads of beauty and emotion throughout the tapestry of human experience.</p>
+              </div>
+          
+              <div class="card">
+                <img src="images\\card5.png" alt="Image 5">
+                <h2>Vocals</h2>
+                <p>Vocals, the human voice in its purest form, serve as the universal language of music. With boundless range and emotion, vocals convey the deepest sentiments and tell stories that resonate with listeners on a visceral level.</p>
+              </div>
+          
+              <div class="card">
+                <img src="images\\card6.png" alt="Image 6">
+                <h2>BGM</h2>
+                <p>BGM ranges from soothing melodies that promote relaxation to energetic beats that invigorate spaces, catering to the specific needs and preferences of the audience. BGM enriches our experiences, and connections with the world around us.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="coloured-text">
+            <h2>Audio Excellence Unleashed: Elevate Your Listening Experience</h2>
+          </div>
+
+          
+<footer>
+    <div class="footer-links">
+        <ul>
+            <li><h3>Terms and conditions</h3></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+        </ul>
+        <ul>
+            <li><h3>Company</h3></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">FAQs</a></li>
+        </ul>
+        <div class="f-icons">
+        <ul>
+            <div class="follow-us">
+            <li><h3>Follow Us</h3></li>
+            <div class="f-icons">
+            <li><a href="#"><i class="fab fa-google"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+            </div>
+            </div>
+        </ul>
+        </div>
+    </div>
+    <div class="copywright">
+        <p>&copy; 2024 Music Spectrum. All rights reserved.</p>
+    </div>
+</footer>
+        <script>
+            const wrapper = document.querySelector('.wrapper');
+            const  loginLink= document.querySelector('.login-link');
+            const registerLink = document.querySelector('.register-link');
+            const btnLoginPopup = document.querySelector('.btnLogin-popup');
+            const btnSignup = document.querySelector('.btnSignup-popup');
+            const iconClose = document.querySelector('.icon-close');
+            const getStarted = document.querySelector('.get-started');
+
+            registerLink.addEventListener('click',()=>{
+                wrapper.classList.add('active');
+            });
+
+            function reloadPage(event) {
+                event.preventDefault();
+                window.location.href = "/home";
+            }
+
+            loginLink.addEventListener('click',()=>{
+                wrapper.classList.remove('active');
+            });
+
+            btnLoginPopup.addEventListener('click',()=>{
+                wrapper.classList.add('active-popup');
+                wrapper.classList.remove('active');
+            });
+          
+            btnSignup.addEventListener('click',()=>{
+                wrapper.classList.add('active');
+                wrapper.classList.add('active-popup');
+            });
+
+            iconClose.addEventListener('click',()=>{
+                wrapper.classList.remove('active-popup');
+            });
+
+            getStarted.addEventListener('click', () => {
+            wrapper.classList.add('active-popup');
+            });
+
+            
+            let registeredUsers = [];
+  
+            function registerUser(username, password) {
+                const isUsernameTaken = registeredUsers.some(user => user.username === username);
+                if (isUsernameTaken) {
+                  alert("Username already taken. Please choose a different username.");
+                  return;
+                }
+                registeredUsers.push({ username, password });
+                Swal.fire({
+                  title: "Registered Successfully!",
+                  text: "Now login into your account",
+                  icon: "success"
+                });
+                // Reset the signup form fields after successful registration
+                document.getElementById("registerUsername").value = "";
+                document.getElementById("registerEmail").value = "";
+                document.getElementById("registerPassword").value = "";
+                document.getElementById("registerConfirmPassword").value = "";
+                wrapper.classList.remove('active-popup');
+              }
+              
+          
+            document.getElementById("registerForm").addEventListener("submit", function(event) {
+              event.preventDefault();
+              const username = document.getElementById("registerUsername").value;
+              const password = document.getElementById("registerPassword").value;
+              const confirmPassword = document.getElementById("registerConfirmPassword").value;
+              if (password !== confirmPassword) {
+                alert("Passwords do not match. Please try again.");
+                return;
+              }
+              registerUser(username, password);
+            });
+          
+            document.getElementById("loginForm").addEventListener("submit", function(event) {
+              event.preventDefault();
+              const username = document.getElementById("loginUsername").value;
+              const password = document.getElementById("loginPassword").value;
+              const user = registeredUsers.find(user => user.username === username);
+              if (user && user.password === password) {
+                
+                // Redirect to Google upon successful login
+                Swal.fire({
+                    title: "Login Sucessful",
+                    text: "You have successfully logged in!",
+                    icon: "success",
+                    showCancelButton: false, // Hide the cancel button
+                    confirmButtonText: "OK" // Customize the confirmation button text
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "music"; // Redirect only if user clicks "OK"
+                    }
+                });
+                document.getElementById("loginError").style.display = "none";
+                document.getElementById("loginError").style.display = "block";
+            }else {
+                document.getElementById("loginError").style.display = "block";
+                blinkErrorMessage();
+              }
+            });
+            function blinkErrorMessage() {
+                const errorMessage = document.getElementById("loginError");
+                let isVisible = true;
+                const intervalId = setInterval(() => {
+                  isVisible = !isVisible;
+                  errorMessage.style.display = isVisible ? "block" : "none";
+                }, 1000); // Adjust blinking speed as needed
+            
+                // Hide the error message after 4 seconds
+                setTimeout(() => {
+                  clearInterval(intervalId);
+                  errorMessage.style.display = "none";
+                }, 1000); // Set the duration to 4000 milliseconds (4 seconds)
+              }
+        </script>
+    </body>
+    </html>
